@@ -1,14 +1,21 @@
 import { useEffect, useState } from 'react';
 
-export const useCountries = () => {
+const useCountriesURL = (filter = false) => {
+  if (filter?.type && filter?.value) {
+    return `https://restcountries.com/v3.1/${filter.type}/${filter.value}?fields=name,cca2`;
+  }
+
+  return 'https://restcountries.com/v3.1/all?fields=name,cca2';
+};
+
+export const useCountries = (filter = false) => {
   const [countries, setCountries] = useState(null);
+  const fetchURL = useCountriesURL(filter);
 
   useEffect(() => {
     const fetchCountries = async () => {
       try {
-        const response = await fetch(
-          'https://restcountries.com/v3.1/all?fields=name,cca2'
-        );
+        const response = await fetch(fetchURL);
         const json = await response.json();
 
         if (!response.ok) {
@@ -20,7 +27,7 @@ export const useCountries = () => {
     };
 
     fetchCountries();
-  }, []);
+  }, [fetchURL]);
 
   return countries;
 };
@@ -60,14 +67,14 @@ export const useSubregions = () => {
   ];
 };
 
-export const useCountryDetails = (name) => {
+export const useCountryDetails = (countryId) => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `https://restcountries.com/v3.1/name/${name}?fields=name,region,subregion,languages,capital,currencies,timezones`
+          `https://restcountries.com/v3.1/alpha/${countryId}?fields=name,region,subregion,languages,capital,currencies,timezones`
         );
         const json = await response.json();
 
@@ -75,12 +82,12 @@ export const useCountryDetails = (name) => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        setData(json[0]);
+        setData(json);
       } catch (error) {}
     };
 
     fetchData();
-  }, [name]);
+  }, [countryId]);
 
   return data;
 };

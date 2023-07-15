@@ -1,29 +1,35 @@
 // import './Detail.css';
+import { useParams, Link } from 'react-router-dom';
 
-import Button from '../../components/Button/Button';
 import CountryDetails from '../../components/CountryDetails/CountryDetails';
 import CountryForm from '../../components/CountryForm/CountryForm';
 
 import { useCountryDetails } from '../../services/countries/countries';
 
-function Detail({ name, onCountryReset }) {
-  const data = useCountryDetails(name);
+function Detail({}) {
+  let { countryId } = useParams();
+
+  const data = useCountryDetails(countryId);
 
   return (
     <article className="detail">
-      <header>
-        <h1>Country: {name}</h1>
-      </header>
+      {data && (
+        <>
+          <header>
+            <h1>Country: {data.name.common}</h1>
+          </header>
 
-      {data && <CountryDetails details={data} />}
+          <CountryDetails details={data} />
 
-      <CountryForm />
+          <CountryForm />
 
-      <aside>
-        <nav aria-label="Actions">
-          <Button label="Back to List" onClick={onCountryReset} />
-        </nav>
-      </aside>
+          <aside>
+            <nav aria-label="Actions">
+              <Link to="/">Back to List</Link>
+            </nav>
+          </aside>
+        </>
+      )}
     </article>
   );
 }
