@@ -1,14 +1,25 @@
+import { useState } from 'react';
 import './App.css';
 
+import Overview from './pages/Overview/Overview';
+import Detail from './pages/Detail/Detail';
+
 function App() {
+  const [activeCountry, setActiveCountry] = useState(null);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>
-          Countries
-        </h1>
-      </header>
-    </div>
+    <main className="app">
+      {!activeCountry && <Overview onCountrySelected={setActiveCountry} />}
+
+      {activeCountry && (
+        <Detail
+          name={activeCountry}
+          onCountryReset={() => {
+            setActiveCountry(null);
+          }}
+        />
+      )}
+    </main>
   );
 }
 
