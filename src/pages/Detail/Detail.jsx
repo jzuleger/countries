@@ -1,5 +1,6 @@
 // import './Detail.css';
 import { useParams, Link } from 'react-router-dom';
+import { Button, Heading } from '@chakra-ui/react';
 
 import CountryDetails from '../../components/CountryDetails/CountryDetails';
 import CountryForm from '../../components/CountryForm/CountryForm';
@@ -16,7 +17,9 @@ function Detail({}) {
       {data && (
         <>
           <header>
-            <h1>Country: {data.name.common}</h1>
+            <Heading as="h1" size="2xl">
+              Country: {data.name.common}
+            </Heading>
           </header>
 
           <CountryDetails details={data} />

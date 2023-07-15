@@ -1,12 +1,24 @@
 import { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import {
+  Heading,
+  Tag,
+  TagLabel,
+  TagCloseButton,
+  Stack,
+  Select
+} from '@chakra-ui/react';
 
-// import './Overview.css';
+import './Overview.css';
 
 // import Button from '../../components/Button/Button';
 import CountryList from './components/CountryList/CountryList';
 
-import { useCountries, useRegions } from '../../services/countries/countries';
+import {
+  useCountries,
+  useRegions,
+  useSubregions
+} from '../../services/countries/countries';
 
 const useFilters = () => {
   const [filter, setFilter] = useState(false);
@@ -29,46 +41,77 @@ function Overview() {
   const filter = useFilters(false);
   const countries = useCountries(filter);
   const regions = useRegions();
+  const subregions = useSubregions();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    console.log(countries);
-  }, [countries]);
+  const handleFilter = (type, value) =>
+    navigate({
+      pathname: '/',
+      search: `?${type}=${value}`
+    });
 
   return (
     <article className="overview">
-      <header>
-        <h1>Countries Overview</h1>
+      <header className="overview__header">
+        <Heading as="h1" size="2xl">
+          Countries Overview
+        </Heading>
       </header>
 
-      <h2>Filter</h2>
-      <ul>
-        {regions?.map((region) => (
-          <li key={`region-${region}`}>
-            <Link
-              to={{
-                pathname: '/',
-                search: `?region=${region}`
+      <Stack spacing={2}>
+        <Heading as="h2" size="md">
+          Filter
+        </Heading>
+
+        {!filter && (
+          <>
+            <Select
+              variant="flushed"
+              placeholder="Choose a region"
+              onChange={(ev) => {
+                handleFilter('region', ev.target.value);
               }}
             >
-              {region}
-            </Link>
-          </li>
-        ))}
-      </ul>
+              {regions?.map((region) => (
+                <option key={`region-${region}`} value={region}>
+                  {region}{' '}
+                </option>
+              ))}
+            </Select>
 
-      {filter && (
-        <Link
-          to={{
-            pathname: '/',
-            search: ''
-          }}
-        >
-          Reset filters
-        </Link>
-      )}
+            <Select
+              variant="flushed"
+              placeholder="Choose a subregion"
+              onChange={(ev) => {
+                handleFilter('subregion', ev.target.value);
+              }}
+            >
+              {subregions?.map((subregion) => (
+                <option key={`subregion-${subregion}`} value={subregion}>
+                  {subregion}{' '}
+                </option>
+              ))}
+            </Select>
+          </>
+        )}
 
-      <h2>List</h2>
-      {countries && <CountryList countries={countries} />}
+        {filter && (
+          <Tag borderRadius="full" variant="solid" colorScheme="green">
+            <TagLabel>Reset: {filter.value}</TagLabel>
+            <TagCloseButton onClick={() => navigate('/')} />
+          </Tag>
+        )}
+      </Stack>
+
+      <div className="overview__list">
+        <Stack spacing={2}>
+          <Heading as="h2" size="md">
+            List
+          </Heading>
+
+          {countries && <CountryList countries={countries} />}
+        </Stack>
+      </div>
     </article>
   );
 }

@@ -1,16 +1,20 @@
-// import './CountryList.css';
-
 import { Link } from 'react-router-dom';
+import { UnorderedList, ListItem } from '@chakra-ui/react';
+import { ChevronRightIcon } from '@chakra-ui/icons';
+
+// import './CountryList.css';
 
 function CountryList({ countries, onCountrySelected }) {
   return (
-    <ul>
+    <UnorderedList>
       {countries.map((country) => (
-        <li key={country.cca2}>
-          <Link to={`/country/${country.cca2}`}>{country.name.common}</Link>
-        </li>
+        <ListItem key={country.cca2}>
+          <Link to={`/country/${country.cca2}`}>
+            {country.name.common} <ChevronRightIcon />
+          </Link>
+        </ListItem>
       ))}
-    </ul>
+    </UnorderedList>
   );
 }
 
