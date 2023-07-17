@@ -4,7 +4,7 @@ import { ChevronRightIcon } from '@chakra-ui/icons';
 
 // import './CountryList.css';
 
-function CountryList({ countries, onCountrySelected }) {
+function CountryList({ countries }) {
   return (
     <UnorderedList>
       {countries.map((country) => (

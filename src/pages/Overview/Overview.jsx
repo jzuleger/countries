@@ -5,19 +5,19 @@ import {
   Tag,
   TagLabel,
   TagCloseButton,
-  Stack,
-  Select
+  Stack
 } from '@chakra-ui/react';
 
 import './Overview.css';
 
-// import Button from '../../components/Button/Button';
 import CountryList from './components/CountryList/CountryList';
+import Filter from '../../components/Filter/Filter';
 
 import {
   useCountries,
   useRegions,
-  useSubregions
+  useSubregions,
+  useLanguages
 } from '../../services/countries/countries';
 
 const useFilters = () => {
@@ -29,6 +29,8 @@ const useFilters = () => {
       setFilter({ type: 'region', value: searchParams.get('region') });
     } else if (searchParams.has('subregion')) {
       setFilter({ type: 'subregion', value: searchParams.get('subregion') });
+    } else if (searchParams.has('language')) {
+      setFilter({ type: 'lang', value: searchParams.get('language') });
     } else {
       setFilter(false);
     }
@@ -42,6 +44,7 @@ function Overview() {
   const countries = useCountries(filter);
   const regions = useRegions();
   const subregions = useSubregions();
+  const languages = useLanguages();
   const navigate = useNavigate();
 
   const handleFilter = (type, value) =>
@@ -65,39 +68,35 @@ function Overview() {
 
         {!filter && (
           <>
-            <Select
-              variant="flushed"
-              placeholder="Choose a region"
-              onChange={(ev) => {
-                handleFilter('region', ev.target.value);
+            <Filter
+              type="region"
+              options={regions}
+              onSelect={(value) => {
+                handleFilter('region', value);
               }}
-            >
-              {regions?.map((region) => (
-                <option key={`region-${region}`} value={region}>
-                  {region}{' '}
-                </option>
-              ))}
-            </Select>
+            />
 
-            <Select
-              variant="flushed"
-              placeholder="Choose a subregion"
-              onChange={(ev) => {
-                handleFilter('subregion', ev.target.value);
+            <Filter
+              type="subregion"
+              options={subregions}
+              onSelect={(value) => {
+                handleFilter('subregion', value);
               }}
-            >
-              {subregions?.map((subregion) => (
-                <option key={`subregion-${subregion}`} value={subregion}>
-                  {subregion}{' '}
-                </option>
-              ))}
-            </Select>
+            />
+
+            <Filter
+              type="language"
+              options={languages}
+              onSelect={(value) => {
+                handleFilter('language', value);
+              }}
+            />
           </>
         )}
 
         {filter && (
           <Tag size="lg" borderRadius="full" variant="solid" colorScheme="gray">
-            <TagLabel>Reset: {filter.value}</TagLabel>
+            <TagLabel>{filter.value}</TagLabel>
             <TagCloseButton onClick={() => navigate('/')} />
           </Tag>
         )}
@@ -106,7 +105,7 @@ function Overview() {
       <div className="overview__list">
         <Stack spacing={2}>
           <Heading as="h2" size="md">
-            List
+            Results
           </Heading>
 
           {countries && <CountryList countries={countries} />}
