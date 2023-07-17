@@ -54,13 +54,13 @@ function Overview() {
     <article className="overview">
       <header className="overview__header">
         <Heading as="h1" size="2xl">
-          Countries Overview
+          Countries
         </Heading>
       </header>
 
       <Stack spacing={2}>
         <Heading as="h2" size="md">
-          Filter
+          Filters
         </Heading>
 
         {!filter && (
@@ -96,7 +96,7 @@ function Overview() {
         )}
 
         {filter && (
-          <Tag borderRadius="full" variant="solid" colorScheme="green">
+          <Tag size="lg" borderRadius="full" variant="solid" colorScheme="gray">
             <TagLabel>Reset: {filter.value}</TagLabel>
             <TagCloseButton onClick={() => navigate('/')} />
           </Tag>

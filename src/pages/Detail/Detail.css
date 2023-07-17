@@ -1,0 +1,19 @@
+.detail {
+}
+
+.detail__header {
+  margin-bottom: 20px;
+}
+
+.detail__list {
+  margin-top: 20px;
+}
+
+.detail__actions {
+  margin-top: 40px;
+}
+
+.detail__action {
+  display: flex;
+  align-items: center;
+}
