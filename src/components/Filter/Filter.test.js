@@ -41,7 +41,7 @@ describe('Filter', () => {
   });
 
   //   Test 3
-  test('returns value via callback when option is selected', () => {
+  test('returns value to callback function when option is selected', () => {
     // Arrange
     const props = {
       type: 'region',
